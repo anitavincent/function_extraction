@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-original = cv2.imread("graph_simples_colorido.jpeg")
+original = cv2.imread("graph_color.jpeg")
 img = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
 
 median = cv2.medianBlur(img,5)
@@ -18,8 +18,6 @@ height,width = dst.shape[:2]
 
 
 file = open("border_results.txt","w") 
-
-file.write("{},{}\n".format(height,width)) 
 
 for i in range(0,height):
 	for j in range(0,width):
