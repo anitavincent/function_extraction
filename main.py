@@ -5,4 +5,4 @@ filename = "graph_color"
 extension = ".jpeg"
 
 find_contour(filename,extension)
-show_pixels(filename)
+# show_pixels(filename)
