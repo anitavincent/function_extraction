@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-def find_contour(filename, extension):
-	original = cv2.imread("{}{}".format(filename,extension))
+def find_contour(group, filename, extension):
+	original = cv2.imread("./pictures/originals/{}{}{}".format(group,filename,extension))
 	img = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
 
 	median = cv2.medianBlur(img,3)
@@ -19,7 +19,6 @@ def find_contour(filename, extension):
 
 	height,width = dst.shape[:2]
 
-
 	file = open("border_results.txt","w") 
 
 	for i in range(0,height):
@@ -29,16 +28,13 @@ def find_contour(filename, extension):
 				original[i][j][0] = 0
 				original[i][j][1] = 255
 				original[i][j][2] = 0
-
  
 
 	 
 	file.close()
 
-	cv2.imwrite("./results/{}_contour{}".format(filename,extension), dst)
-	cv2.imwrite("./results/{}_highlight{}".format(filename,extension), original)
+	cv2.imwrite("./pictures/results/{}{}_contour{}".format(group,filename,extension), dst)
+	cv2.imwrite("./pictures/results/{}{}_highlight{}".format(group,filename,extension), original)
 
-	cv2.imshow("Filtered Image", dst)
-	cv2.imshow("Highlight borders", original)
-	cv2.waitKey(0)
+	# cv2.waitKey(0)
 	cv2.destroyAllWindows()

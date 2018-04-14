@@ -35,7 +35,7 @@ def reduce(filename):
 		print "heigh: {} widhth: {}".format(height, width)
 		return height+1, width+1
 
-def show_pixels(filename):
+def show_pixels(group,filename):
 	height, width = reduce("border_results.txt")
 	blank_image = np.zeros((height,width,3), np.uint8)
 	blank_image[:,:] = (255,255,255)
@@ -51,6 +51,7 @@ def show_pixels(filename):
 			blank_image[i,j] = (0,0,0)
 
 		cv2.imshow("Foto", blank_image)
-		cv2.imwrite("./results/{}_border_results.jpeg".format(filename), blank_image)
+		cv2.imwrite("./pictures/results/{}{}_border_results.jpeg".format(group,filename), blank_image)
+		print "./pictures/results/{}{}_border_results.jpeg".format(group,filename)
 		cv2.waitKey(0)
 		cv2.destroyAllWindows()
