@@ -5,7 +5,7 @@ def find_contour(group, filename, extension):
 	original = cv2.imread("./pictures/originals/{}{}{}".format(group,filename,extension))
 	img = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
 
-	median = cv2.medianBlur(img,3)
+	img = cv2.bilateralFilter(img,15,25,75)
 
 	# laplace
 	laplacian = np.array((
@@ -13,7 +13,7 @@ def find_contour(group, filename, extension):
 		[1, -4, 1],
 		[0, 1, 0]), dtype="int")
 	kernel = laplacian
-	dst = cv2.filter2D(median,-1,kernel)
+	dst = cv2.filter2D(img,-1,kernel)
 
 	retval, dst = cv2.threshold(dst, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
