@@ -6,6 +6,8 @@ def find_contour(group, filename, extension):
 	img = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
 
 	img = cv2.bilateralFilter(img,15,25,75)
+	import ipdb;ipdb.set_trace()
+	cv2.imshow(" ", img)
 
 	# laplace
 	laplacian = np.array((
@@ -36,5 +38,5 @@ def find_contour(group, filename, extension):
 	cv2.imwrite("./pictures/results/{}{}_contour{}".format(group,filename,extension), dst)
 	cv2.imwrite("./pictures/results/{}{}_highlight{}".format(group,filename,extension), original)
 
-	# cv2.waitKey(0)
+	cv2.waitKey(0)
 	cv2.destroyAllWindows()

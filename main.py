@@ -13,11 +13,16 @@ all_imgs = ["group1/graph_simple.jpeg",
 			"group1/fun5.png",
 			"group1/fun6.jpg",
 			"group2/dotted1.jpeg",
-			"group2/dotted1.jpeg",
+			"group2/dotted2.jpeg",
 			"group2/grid1.png",
 			"group2/grid2.png",
 			"group2/grid3.png",
-			"group2/grid4.jpg"
+			"group2/grid4.jpg",
+			"group3/grid1.png",
+			"group3/grid2.png",
+			"group3/grid3.png",
+			"group3/grid4.png",
+			"group3/grid5.png"
 ]
 
 def run_all():
@@ -36,8 +41,9 @@ def separate_name(st):
 def run_one_image(st):
 	group, filename, extension = separate_name(st)
 
-	find_sk(group,filename,extension)
+	process_sk(group,filename,extension)
 	# find_contour(group,filename,extension)
-	show_pixels(group, filename)
+	# show_pixels(group, filename)
 
 run_all()
+# run_one_image("group2/grid2.png")
