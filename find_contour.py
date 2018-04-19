@@ -35,8 +35,8 @@ def find_contour(group, filename, extension):
 	 
 	file.close()
 
-	cv2.imwrite("./pictures/results/{}{}_contour{}".format(group,filename,extension), dst)
-	cv2.imwrite("./pictures/results/{}{}_highlight{}".format(group,filename,extension), original)
+	# cv2.imwrite("./pictures/results/{}{}_contour{}".format(group,filename,extension), dst)
+	# cv2.imwrite("./pictures/results/{}{}_highlight{}".format(group,filename,extension), original)
 
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()

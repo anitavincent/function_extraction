@@ -1,6 +1,7 @@
 from find_contour import *
 from show_pixels import *
 from extract_skeleton import *
+from find_lines import *
 
 all_imgs = ["group1/graph_simple.jpeg",
 			"group1/graph_drawing.jpeg",
@@ -41,9 +42,9 @@ def separate_name(st):
 def run_one_image(st):
 	group, filename, extension = separate_name(st)
 
-	process_sk(group,filename,extension)
-	# find_contour(group,filename,extension)
-	# show_pixels(group, filename)
+	image = process_sk(group,filename,extension)
+	
+	find_lines(image, group, filename, extension)
 
 run_all()
-# run_one_image("group2/grid2.png")
+# run_one_image("group1/fun1.png")

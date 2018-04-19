@@ -3,6 +3,8 @@
 # image discarding padding inactive pixels
 def crop_binary(image):
 
+	padding = 3
+
 	maxX = -1
 	maxY = -1
 	baseX = 99999999999999999999
@@ -24,13 +26,13 @@ def crop_binary(image):
 	if maxX == -1:
 		return 0, 0, image[0:2, 0:2]
 
-	if baseY > 0:
-		baseY-=1
-	if maxY < image.shape[0]:
-		maxY+1
-	if baseX > 0:
-		baseX-=1
-	if maxX < image.shape[1]:
-		maxX+1
+	if baseY-padding >= 0:
+		baseY-=padding
+	if maxY+padding <= image.shape[0]:
+		maxY+=padding
+	if baseX-padding >= 0:
+		baseX-=padding
+	if maxX+padding <= image.shape[1]:
+		maxX+padding
 
 	return baseY, baseX, image[baseY:maxY, baseX:maxX]
