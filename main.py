@@ -47,4 +47,4 @@ def run_one_image(st):
 	find_lines(image, group, filename, extension)
 
 run_all()
-# run_one_image("group1/fun1.png")
+# run_one_image("group1/fun2.png")
