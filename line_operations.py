@@ -8,6 +8,32 @@ def angle(x1, y1, x2, y2):
     len2 = math.hypot(x2, y2)
     return math.acos(inner_product/(len1*len2))
 
+def extrapolate_lines(image, lines):
+	extra_lines = lines
+	for line in lines:
+		slope = 0
+		for x1, y1, x2, y2 in line:
+			slope = get_slope(line)
+		line_ex = extrapolated_line(image, line, slope)
+		extra_lines = remove_line_from_list(extra_lines, line)
+		extra_lines = add_line_to_list(extra_lines, line_ex)
+	return extra_lines
+
+def extrapolated_line(image, line, slope):
+	height,width = image.shape[:2]
+
+	for x1, y1, x2, y2 in line:
+		if slope==None:
+			return [[ x1, 0, x2, height-1 ]]
+		elif slope==0.0:
+			return [[ 0, y1, width-1, y2 ]]
+		else:
+				m = slope
+				b = y1 - m * x1
+				x1b = (0 - b) / m
+				x2b = (height - 1 - b) / m
+				return [[ int(x1b), 0, int(x2b), height-1 ]]
+
 # get image and a set of points that represents the lines
 # draws lines over image
 def draw_lines(image, lines, color=[255, 0, 0], thickness=3):
@@ -166,15 +192,25 @@ def classify_lines(lines):
 	for line in lines:
 		slope = get_slope(line)
 		if(slope!=None):
-			if get_slope(line)>7.5:
+			slope = math.fabs(slope)
+			if slope>7.5:
 				dicti[hashify(line)] = "vert"
-			elif get_slope(line)<0.15:
+			elif slope<0.15:
 				dicti[hashify(line)] = "hori"
 			else:
 				dicti[hashify(line)] = "none"
 		else:
 			dicti[hashify(line)] = "vert"
 	return dicti
+
+def clean_diagonal_lines(lines):
+	lines_class = classify_lines(lines)
+	clean_lines = lines
+	for line in lines:
+		if lines_class[hashify(line)]=="none":
+			clean_lines = remove_line_from_list(clean_lines, line)
+
+	return clean_lines
 
 def remove_line_from_list(lista, line):
 	index = lista.tolist().index(line.tolist())
@@ -187,4 +223,4 @@ def get_slope(line):
 	for x1, y1, x2, y2 in line:
 		if x1 == x2:
 			return None
-		return math.fabs(float(y2 - y1) / float(x2 - x1))
+		return float(y2 - y1) / float(x2 - x1)
