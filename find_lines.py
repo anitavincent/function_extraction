@@ -22,6 +22,7 @@ def find_lines(image, group, filename, extension):
 	lines = clean_diagonal_lines(lines)
 	lines = group_lines(lines)
 	lines = extrapolate_lines(original, lines)
+	lines = reduce_to_two(lines)
 
 	original = draw_lines(original, lines)
 
