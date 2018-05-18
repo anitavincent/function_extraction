@@ -92,6 +92,26 @@ def draw_lines(image, lines, color=[255, 0, 0], thickness=3):
     
 	return image
 
+def erase_lines(image, lines):
+	color = 0
+	dicio = classify_lines(lines)
+	hori_thick = 7
+	verti_thick = 15
+
+	if lines is None:
+		return image
+
+	for line in lines:
+		colur = color
+		if dicio[hashify(line)] == "vert":
+			thickness = verti_thick
+		if dicio[hashify(line)] == "hori":
+			thickness = hori_thick
+		for x1, y1, x2, y2 in line:
+			cv2.line(image, (x1, y1), (x2, y2), color, thickness)
+    
+	return image
+
 # gets set of lines and returns reduced set
 # for each line looks for lines that are close
 # and merge them
