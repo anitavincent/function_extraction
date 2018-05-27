@@ -35,15 +35,12 @@ class FileManager:
     def get_image_list(self):
         return self.all_imgs
 
-    # def get_image(self):
-    #     pass
     def _separate_name(self, path):
         lst = path.split('/')
         first = "{}/".format(lst[0])
         lst = lst[1].split('.')
         second = lst[0]
         third = ".{}".format(lst[1])
-        print first, second, third
         return [first, second, third]
 
     def save_image(self, image, original_path, aditional_name):

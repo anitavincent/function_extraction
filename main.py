@@ -18,11 +18,13 @@ def run_one_image(img_path):
 
     image = extract_skeleton(image)
 
-    FileManager().save_image(image, img_path, "_skeleton")
+    # FileManager().save_image(image, img_path, "_skeleton")
 
-    axis_lines = find_lines(image)
+    axis_lines, image = find_lines(image)
+
+    FileManager().save_image(image, img_path, "_lines")
 
     # clean_axis(image, axis_lines, group, filename, extension)
 
-# run_all()
-run_one_image("group1/fun2.png")
+run_all()
+# run_one_image("group1/fun2.png")
