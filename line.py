@@ -77,16 +77,20 @@ class Line:
             return False
 
         if self.get_direction() == "hori":
-            if other_line.y1 >= (self.y1 - thr) and other_line.y1 <= (self.y1 + thr):
+            if other_line.y1 >= (self.y1 - thr) and \
+                    other_line.y1 <= (self.y1 + thr):
                 return True
-            elif other_line.y2 >= (self.y1 - thr) and other_line.y2 <= (self.y1 + thr):
+            elif other_line.y2 >= (self.y1 - thr) and \
+                    other_line.y2 <= (self.y1 + thr):
                 return True
             else:
                 return False
         elif self.get_direction() == "vert":
-            if other_line.x1 >= (self.x1 - thr) and other_line.x1 <= (self.x1 + thr):
+            if other_line.x1 >= (self.x1 - thr) and \
+                    other_line.x1 <= (self.x1 + thr):
                 return True
-            elif other_line.x2 >= (self.x1 - thr) and other_line.x2 <= (self.x1 + thr):
+            elif other_line.x2 >= (self.x1 - thr) and \
+                    other_line.x2 <= (self.x1 + thr):
                 return True
             else:
                 return False
@@ -128,3 +132,16 @@ class Line:
             x1b = (0 - b) / m
             x2b = (height - 1 - b) / m
             self.set_values([[int(x1b), 0, int(x2b), height - 1]])
+
+    def find_intersection(self, line):
+        x1, y1, x2, y2 = [self.x1, self.y1, self.x2, self.y2]
+        x3, y3, x4, y4 = [line.x1, line.y1, line.x2, line.y2]
+
+        # determinant
+        px = ((x1 * y2 - y1 * x2) * (x3 - x4) -
+              (x1 - x2) * (x3 * y4 - y3 * x4)) /  \
+            ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
+        py = ((x1 * y2 - y1 * x2) * (y3 - y4) -
+              (y1 - y2) * (x3 * y4 - y3 * x4)) /  \
+            ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
+        return px, py

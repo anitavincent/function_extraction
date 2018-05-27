@@ -1,53 +1,38 @@
 import cv2
 import numpy as np
 import math
+from lineList import LineList
 
 
 def reduce_to_two(lines):
     # returns only the 2 lines most perpendicular
-    orientation = classify_lines(lines)
     visited = {}
     smallest_diff = math.pi / 2
     for line in lines:
         for line2 in lines:
-            if hashify(line) != hashify(line2):
-                if orientation[hashify(line)] != orientation[hashify(line2)]:
-                    if not visited.get(hashify(line2)):
+            if line.hashify() != line2.hashify():
+                if line.get_direction() != line2.get_direction():
+                    if not visited.get(line.hashify()):
                         diff = math.fabs(math.pi / 2 - angle(line, line2))
                         if diff < smallest_diff:
                             smallest_diff = diff
                             result1 = line
                             result2 = line2
-        visited[hashify(line)] = True
+        visited[line.hashify()] = True
 
-    results = add_line_to_list([result1], result2)
+    results = LineList()
+    results.add_line(result1)
+    results.add_line(result2)
     return results
-
-# COPIADO
-# TODO
-
-
-def find_intersection(line1, line2):
-    # extract points
-    x1, y1, x2, y2 = line1[0]
-    x3, y3, x4, y4 = line2[0]
-    # compute determinant
-    Px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /  \
-        ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
-    Py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /  \
-        ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
-    return Px, Py
 
 
 def angle(line, line2):
-    for x1, y1, x2, y2 in line:
-        for X1, Y1, X2, Y2 in line2:
-            u = [x2 - x1, y2 - y1]
-            v = [X2 - X1, Y2 - Y1]
-            norm_u = math.hypot(u[0], u[1])
-            norm_v = math.hypot(v[0], v[1])
-            inner_product = (u[0] * v[0]) + (u[1] * v[1])
-            return math.acos(inner_product / (norm_u * norm_v))
+    u = [line.x2 - line.x1, line.y2 - line.y1]
+    v = [line2.x2 - line2.x1, line2.y2 - line2.y1]
+    norm_u = math.hypot(u[0], u[1])
+    norm_v = math.hypot(v[0], v[1])
+    inner_product = (u[0] * v[0]) + (u[1] * v[1])
+    return math.acos(inner_product / (norm_u * norm_v))
 
 
 def draw_lines(image, lines, thickness=3):

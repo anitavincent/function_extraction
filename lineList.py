@@ -7,7 +7,7 @@ from line import Line
 
 class LineList:
 
-    def __init__(self, lines):
+    def __init__(self, lines=[]):
         self.lines = {}
         for line in lines:
             line = Line(line)
@@ -15,6 +15,11 @@ class LineList:
 
     def add_line(self, line):
         self.lines[line.hashify()] = line
+
+    # reset hash
+    def reset_hash(self, line, old_hash):
+        del self.lines[old_hash]
+        self.add_line(line)
 
     def remove_line(self, line):
         del self.lines[line.hashify()]
@@ -65,7 +70,9 @@ class LineList:
         # updates line dictionary with lines now merged
         # import ipdb; ipdb.set_trace()
         for line2 in close_lines:
+            old_hash = line.hashify()
             line.interpolate(line2)
+            self.reset_hash(line, old_hash)
 
         for line2 in close_lines:
             self.remove_line(line2)
@@ -73,4 +80,6 @@ class LineList:
     # extrapolates all lines until they reach the borders
     def extrapolate_lines(self, image):
         for line in self.lines.values():
+            old_hash = line.hashify()
             line.extrapolate(image)
+            self.reset_hash(line, old_hash)
