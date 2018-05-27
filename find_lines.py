@@ -27,8 +27,6 @@ def find_lines(image):
     # original = draw_lines(original, lines)
     # original = erase_lines(original, lines)
 
-
-
     return lines
 
     # cv2.imshow("", dilation)

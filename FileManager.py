@@ -5,7 +5,7 @@ class FileManager:
 
     results_folder = "./pictures/results/"
     originals_folder = "./pictures/originals/"
-    
+
     all_imgs = ["group1/graph_simple.jpeg",
                 "group1/graph_drawing.jpeg",
                 "group1/graph_color.jpeg",

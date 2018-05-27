@@ -25,6 +25,8 @@ def reduce_to_two(lines):
 
 # COPIADO
 # TODO
+
+
 def find_intersection(line1, line2):
     # extract points
     x1, y1, x2, y2 = line1[0]
@@ -114,6 +116,7 @@ def erase_lines(image, lines):
             #                     acceptable_angle_variation)
 
     return image
+
 
 def find_first_axis_point(image, starting_point, direction):
 
@@ -267,7 +270,7 @@ def classify_lines(lines):
     dicti = {}
     for line in lines:
         slope = get_slope(line)
-        if(slope != None):
+        if(slope is not None):
             slope = math.fabs(slope)
             if slope > 7.5:
                 dicti[hashify(line)] = "vert"
