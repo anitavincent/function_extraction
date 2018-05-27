@@ -1,10 +1,11 @@
 from find_contour import *
 from show_pixels import *
-from extract_skeleton import *
+from extract_skeleton import extract_skeleton
 from find_lines import *
 from clean_axis import *
 from FileManager import FileManager
 import cv2
+
 
 def run_all():
     all_imgs = FileManager().get_image_list()
@@ -13,21 +14,11 @@ def run_all():
         run_one_image(img)
 
 
-def separate_name(st):
-    lst = st.split('/')
-    first = "{}/".format(lst[0])
-    lst = lst[1].split('.')
-    second = lst[0]
-    third = ".{}".format(lst[1])
-    print first, second, third
-    return [first, second, third]
-
-
 def run_one_image(img_path):
 
     image = FileManager().get_image(img_path)
 
-    image = process_sk(image)
+    image = extract_skeleton(image)
 
     FileManager().save_image(image, img_path, "_skeleton")
 
