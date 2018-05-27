@@ -25,8 +25,6 @@ def reduce_to_two(lines):
 
 # COPIADO
 # TODO
-
-
 def find_intersection(line1, line2):
     # extract points
     x1, y1, x2, y2 = line1[0]
@@ -68,7 +66,7 @@ def extrapolated_line(image, line, slope):
     height, width = image.shape[:2]
 
     for x1, y1, x2, y2 in line:
-        if slope == None:
+        if slope is None:
             return [[x1, 0, x2, height - 1]]
         elif slope == 0.0:
             return [[0, y1, width - 1, y2]]
@@ -109,10 +107,18 @@ def erase_lines(image, lines):
         return image
 
     for line in lines:
-        if dicio[hashify(line)] == "vert":
-        if dicio[hashify(line)] == "hori":
+        for x1, y1, x2, y2 in line:
+            point = (x1, y1)
+            first_point = find_first_axis_point(image, point, dici[hashify])
+            # image = erase_line(image, point, dicio[hashify],
+            #                     acceptable_angle_variation)
 
     return image
+
+def find_first_axis_point(image, starting_point, direction):
+
+    if direction == "verti":
+        get_neighbours_radius(5, up)
 
 
 def group_lines(lines):

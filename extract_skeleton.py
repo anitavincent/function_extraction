@@ -69,9 +69,8 @@ def find_sk(img, thr):
     return skeleton
 
 
-def process_sk(group, filename, extension):
-    original = cv2.imread(
-        "./pictures/originals/{}{}{}".format(group, filename, extension))
+def process_sk(original_image):
+    original = original_image
     img = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
 
     thr = THRESHOLD
@@ -99,9 +98,6 @@ def process_sk(group, filename, extension):
                 blank_image[i, j] = (0, 0, 0)
 
     file.close()
-
-    # cv2.imwrite("./pictures/results/{}{}_contour{}".format(group,filename,extension), blank_image)
-    # cv2.imwrite("./pictures/results/{}{}_highlight{}".format(group,filename,extension), original)
 
     # cv2.waitKey(0)
     cv2.destroyAllWindows()

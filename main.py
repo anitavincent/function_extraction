@@ -2,32 +2,13 @@ from find_contour import *
 from show_pixels import *
 from extract_skeleton import *
 from find_lines import *
-
-all_imgs = ["group1/graph_simple.jpeg",
-            "group1/graph_drawing.jpeg",
-            "group1/graph_color.jpeg",
-            "group1/graph_print.png",
-            "group1/fun1.png",
-            "group1/fun2.png",
-            "group1/fun3.png",
-            "group1/fun4.jpg",
-            "group1/fun5.png",
-            "group1/fun6.jpg",
-            "group2/dotted1.jpeg",
-            "group2/dotted2.jpeg",
-            "group2/grid1.png",
-            "group2/grid2.png",
-            "group2/grid3.png",
-            "group2/grid4.jpg",
-            "group3/grid1.png",
-            "group3/grid2.png",
-            "group3/grid3.png",
-            "group3/grid4.png",
-            "group3/grid5.png"
-            ]
-
+from clean_axis import *
+from FileManager import FileManager
+import cv2
 
 def run_all():
+    all_imgs = FileManager().get_image_list()
+
     for img in all_imgs:
         run_one_image(img)
 
@@ -42,12 +23,17 @@ def separate_name(st):
     return [first, second, third]
 
 
-def run_one_image(st):
-    group, filename, extension = separate_name(st)
+def run_one_image(img_path):
 
-    image = process_sk(group, filename, extension)
+    image = FileManager().get_image(img_path)
 
-    find_lines(image, group, filename, extension)
+    image = process_sk(image)
+
+    FileManager().save_image(image, img_path, "_skeleton")
+
+    axis_lines = find_lines(image)
+
+    # clean_axis(image, axis_lines, group, filename, extension)
 
 run_all()
 # run_one_image("group1/fun2.png")

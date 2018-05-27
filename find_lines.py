@@ -4,10 +4,9 @@ import math
 from line_operations import *
 
 
-def find_lines(image, group, filename, extension):
+def find_lines(image):
 
     original = image
-    # retval, image = cv2.threshold(image, 2, 1, cv2.THRESH_BINARY)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     lines = cv2.HoughLinesP(
@@ -22,14 +21,15 @@ def find_lines(image, group, filename, extension):
 
     lines = clean_diagonal_lines(lines)
     lines = group_lines(lines)
-    lines = extrapolate_lines(original, lines)
     lines = reduce_to_two(lines)
+    # lines = extrapolate_lines(original, lines)
 
     # original = draw_lines(original, lines)
-    original = erase_lines(original, lines)
+    # original = erase_lines(original, lines)
 
-    cv2.imwrite("./pictures/results/{}{}_hough{}".format(group,
-                                                         filename, extension), original)
+
+
+    return lines
 
     # cv2.imshow("", dilation)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
