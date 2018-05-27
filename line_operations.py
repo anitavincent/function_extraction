@@ -2,10 +2,9 @@ import cv2
 import numpy as np
 import math
 
-# returns only the 2 lines most perpendicular
-
 
 def reduce_to_two(lines):
+    # returns only the 2 lines most perpendicular
     orientation = classify_lines(lines)
     visited = {}
     smallest_diff = math.pi / 2
@@ -50,10 +49,9 @@ def angle(line, line2):
             inner_product = (u[0] * v[0]) + (u[1] * v[1])
             return math.acos(inner_product / (norm_u * norm_v))
 
-# extrapolates all lines until they reach the borders
-
 
 def extrapolate_lines(image, lines):
+    # extrapolates all lines until they reach the borders
     extra_lines = lines
     for line in lines:
         slope = 0
@@ -64,10 +62,9 @@ def extrapolate_lines(image, lines):
         extra_lines = add_line_to_list(extra_lines, line_ex)
     return extra_lines
 
-# extrapolates a single line
-
 
 def extrapolated_line(image, line, slope):
+    # extrapolates a single line
     height, width = image.shape[:2]
 
     for x1, y1, x2, y2 in line:
@@ -82,11 +79,10 @@ def extrapolated_line(image, line, slope):
             x2b = (height - 1 - b) / m
             return [[int(x1b), 0, int(x2b), height - 1]]
 
-# get image and a set of points that represents the lines
-# draws lines over image
 
-
-def draw_lines(image, lines, color=[255, 0, 0], thickness=3):
+def draw_lines(image, lines, color=[255, 0, 0], thickness=1):
+    # get image and a set of points that represents the lines
+    # draws lines over image
     dicio = classify_lines(lines)
 
     if lines is None:
@@ -105,51 +101,43 @@ def draw_lines(image, lines, color=[255, 0, 0], thickness=3):
 
 
 def erase_lines(image, lines):
-    color = 0
+
     dicio = classify_lines(lines)
-    hori_thick = 7
-    verti_thick = 15
+    acceptable_angle_variation = 10
 
     if lines is None:
         return image
 
     for line in lines:
-        colur = color
         if dicio[hashify(line)] == "vert":
-            thickness = verti_thick
         if dicio[hashify(line)] == "hori":
-            thickness = hori_thick
-        for x1, y1, x2, y2 in line:
-            cv2.line(image, (x1, y1), (x2, y2), color, thickness)
 
     return image
 
-# gets set of lines and returns reduced set
-# for each line looks for lines that are close
-# and merge them
-
 
 def group_lines(lines):
+    # gets set of lines and returns reduced set
+    # for each line looks for lines that are close
+    # and merge them
     close_lines = lines
     while(True):
-        if close_lines == None or close_lines.shape[0] == 1:
+        if close_lines is None or close_lines.shape[0] == 1:
             break
         for line in lines:
             close_lines = find_close_lines(line, lines)
-            if close_lines == None:
+            if close_lines is None:
                 continue
             lines = merge_close_lines(close_lines, lines)
-            if not close_lines == None and not close_lines.shape[0] == 1:
+            if close_lines is not None and not close_lines.shape[0] == 1:
                 break
 
     return lines
 
-# receives set of close_lines (lines to be merged)
-# and full set of lines
-# returns full set now with close_lines merged
-
 
 def merge_close_lines(close_lines, lines):
+    # receives set of close_lines (lines to be merged)
+    # and full set of lines
+    # returns full set now with close_lines merged
     lines_orientation = classify_lines(close_lines)
     for line in close_lines:
         orientation = lines_orientation[hashify(line)]
@@ -166,11 +154,10 @@ def merge_close_lines(close_lines, lines):
     lines = add_line_to_list(lines, full_line)
     return lines
 
-# gets set of horizontal lines
-# returns single interpolated line
-
 
 def interpolate_hori(lines):
+    # gets set of horizontal lines
+    # returns single interpolated line
     most_left = []
     most_right = []
     low_x = 1000000
@@ -192,11 +179,10 @@ def interpolate_hori(lines):
 
     return [[most_left[0], most_left[1], most_right[0], most_right[1]]]
 
-# gets set of vertical lines
-# returns single interpolated line
-
 
 def interpolate_vert(lines):
+    # gets set of vertical lines
+    # returns single interpolated line
     most_top = []
     most_bottom = []
     low_y = 1000000
@@ -218,12 +204,11 @@ def interpolate_vert(lines):
 
     return [[most_bottom[0], most_bottom[1], most_top[0], most_top[1]]]
 
-# gets set of lines and a pivot line
-# looks for lines that are close in space to pivot line
-# returns set of lines that are close, including the pivot
-
 
 def find_close_lines(line, lines):
+    # gets set of lines and a pivot line
+    # looks for lines that are close in space to pivot line
+    # returns set of lines that are close, including the pivot
     tolerance = 30
 
     lines_class = classify_lines(lines)
@@ -264,17 +249,15 @@ def check_close_vertical(line1, line2, thr):
                 return True
     return False
 
-# returns a unique hash to represent a line
-
 
 def hashify(line):
+    # returns a unique hash to represent a line
     return tuple(line.tolist()[0])
-
-# gets set of lines
-# returns dictionary with the orientation of each line
 
 
 def classify_lines(lines):
+    # gets set of lines
+    # returns dictionary with the orientation of each line
     dicti = {}
     for line in lines:
         slope = get_slope(line)
