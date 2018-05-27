@@ -1,5 +1,9 @@
 from line import Line
 
+# possible problem here, you should probably update
+# dictionary everytime you change a line, because its hash
+# is changing, good luck
+
 
 class LineList:
 
@@ -63,9 +67,10 @@ class LineList:
         for line2 in close_lines:
             line.interpolate(line2)
 
-        # full_line = line.copy()
-
         for line2 in close_lines:
             self.remove_line(line2)
 
-        # self.add_line(full_line)
+    # extrapolates all lines until they reach the borders
+    def extrapolate_lines(self, image):
+        for line in self.lines.values():
+            line.extrapolate(image)

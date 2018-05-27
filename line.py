@@ -15,6 +15,7 @@ class Line:
             self.x2 = x2
             self.y2 = y2
 
+    # reorder so lowest values are always first
     def reorder(self):
         if self.get_direction() == "hori":
             if self.x1 > self.x2:
@@ -24,6 +25,7 @@ class Line:
             if self.y1 > self.y2:
                 self.set_values([[self.x2, self.y2, self.x1, self.y1]])
 
+    # render line over image
     def draw(self, image, color, thickness=1):
         cv2.line(image, (self.x1, self.y1), (self.x2, self.y2),
                  color, thickness)
@@ -34,6 +36,7 @@ class Line:
             return None
         return float(self.y2 - self.y1) / float(self.x2 - self.x1)
 
+    # interpolate self to other line
     def interpolate(self, line):
         if self.get_direction() == "hori":
             small_x, small_y = self._find_low(line, "x")
@@ -44,26 +47,6 @@ class Line:
             big_x, big_y = self._find_high(line, "y")
 
         self.set_values([[small_x, small_y, big_x, big_y]])
-
-    def _find_high(self, line, axis):
-        if axis == "x":
-            if line.x2 > self.x2:
-                return line.x2, line.y2
-            return self.x2, self.y2
-        if axis == "y":
-            if line.y2 > self.y2:
-                return line.x2, line.y2
-            return self.x2, self.y2
-
-    def _find_low(self, line, axis):
-        if axis == "x":
-            if line.x1 < self.x1:
-                return line.x1, line.y1
-            return self.x1, self.y1
-        if axis == "y":
-            if line.y1 < self.y1:
-                return line.x1, line.y1
-            return self.x1, self.y1
 
     def get_direction(self):
 
@@ -80,10 +63,13 @@ class Line:
         else:
             return "vert"
 
+    # returns a unique hash to represent the line
     def hashify(self):
-        # returns a unique hash to represent the line
         return "{}.{}.{}.{}".format(self.x1, self.y1, self.x2, self.y2)
 
+    # jugdes if self is close to other line
+    # to be 'close' they must have the same direction
+    # and be close on that axis
     def is_close_to(self, other_line, max_distance=30):
         thr = max_distance
 
@@ -104,3 +90,41 @@ class Line:
                 return True
             else:
                 return False
+
+    # auxiliar to interpolate
+    def _find_high(self, line, axis):
+        if axis == "x":
+            if line.x2 > self.x2:
+                return line.x2, line.y2
+            return self.x2, self.y2
+        if axis == "y":
+            if line.y2 > self.y2:
+                return line.x2, line.y2
+            return self.x2, self.y2
+
+    # auxiliar to interpolate
+    def _find_low(self, line, axis):
+        if axis == "x":
+            if line.x1 < self.x1:
+                return line.x1, line.y1
+            return self.x1, self.y1
+        if axis == "y":
+            if line.y1 < self.y1:
+                return line.x1, line.y1
+            return self.x1, self.y1
+
+    # extrapolate line so it reachs border
+    def extrapolate(self, image):
+        height, width = image.shape[:2]
+        slope = self.get_slope()
+
+        if slope is None:
+            self.set_values([[self.x1, 0, self.x2, height - 1]])
+        elif slope == 0.0:
+            self.set_values([[0, self.y1, width - 1, self.y2]])
+        else:
+            m = slope
+            b = self.y1 - m * self.x1
+            x1b = (0 - b) / m
+            x2b = (height - 1 - b) / m
+            self.set_values([[int(x1b), 0, int(x2b), height - 1]])

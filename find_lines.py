@@ -25,8 +25,8 @@ def find_lines(image):
 
     line_list.remove_diagonal_lines()
     line_list.group_lines()
+    line_list.extrapolate_lines(original)
     # lines = reduce_to_two(lines)
-    # lines = extrapolate_lines(original, lines)
 
     original = draw_lines(original, line_list.lines.values())
     # original = erase_lines(original, lines)
