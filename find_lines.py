@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import math
 from line_operations import *
+from line import Line
+from lineList import LineList
 
 
 def find_lines(image):
@@ -9,7 +11,7 @@ def find_lines(image):
     original = image
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    lines = cv2.HoughLinesP(
+    unprocessed_lines = cv2.HoughLinesP(
         image,
         rho=6,
         theta=np.pi / 60,
@@ -19,15 +21,17 @@ def find_lines(image):
         maxLineGap=10
     )
 
-    lines = clean_diagonal_lines(lines)
-    lines = group_lines(lines)
-    lines = reduce_to_two(lines)
+    line_list = LineList(unprocessed_lines)
+
+    line_list.remove_diagonal_lines()
+    line_list.group_lines()
+    # lines = reduce_to_two(lines)
     # lines = extrapolate_lines(original, lines)
 
-    # original = draw_lines(original, lines)
+    original = draw_lines(original, line_list.lines.values())
     # original = erase_lines(original, lines)
 
-    return lines
+    return line_list, original
 
     # cv2.imshow("", dilation)
     # cv2.waitKey(0)
