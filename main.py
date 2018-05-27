@@ -1,5 +1,3 @@
-from find_contour import *
-from show_pixels import *
 from extract_skeleton import extract_skeleton
 from find_lines import *
 from clean_axis import *
@@ -26,5 +24,5 @@ def run_one_image(img_path):
 
     # clean_axis(image, axis_lines, group, filename, extension)
 
-run_all()
-# run_one_image("group1/fun2.png")
+# run_all()
+run_one_image("group1/fun2.png")

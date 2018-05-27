@@ -66,6 +66,19 @@ def get_skeleton(img, thr):
     return skeleton
 
 
+def convert_to_grayscale(image):
+    height, width = image.shape[:2]
+    blank_image = np.zeros((height, width, 3), np.uint8)
+    blank_image[:, :] = (255, 255, 255)
+
+    for i in range(0, height):
+        for j in range(0, width):
+            if image[i][j] > 0.0:
+                blank_image[i, j] = (0, 0, 0)
+
+    return 255 - blank_image
+
+
 def extract_skeleton(original_image):
     original = original_image
     img = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
@@ -76,8 +89,13 @@ def extract_skeleton(original_image):
     percent = calculate_percent(skeleton)
     if percent < 0.001:
         thr = THRESHOLD * 0.5
-        skeleton = find_sk(img, thr)
+        skeleton = get_skeleton(img, thr)
         baseI, baseJ, skeleton = crop_binary(skeleton)
 
+    skeleton = convert_to_grayscale(skeleton)
+
     # cv2.waitKey(0)
-    return 255 - blank_image
+    # height, width = skeleton.shape[:2]
+    # blank_image = np.zeros((height, width, 3), np.uint8)
+    # blank_image[:, :] = (255, 255, 255)
+    return skeleton
