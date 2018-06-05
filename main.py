@@ -1,9 +1,10 @@
+import cv2
+
 from extract_skeleton import extract_skeleton
 from find_lines import *
 from clean_axis import *
 from remove_noise import *
 from FileManager import FileManager
-import cv2
 
 
 def run_all():

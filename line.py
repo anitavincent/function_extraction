@@ -1,12 +1,12 @@
-import cv2
 import math
+import cv2
 
 
 class Line:
 
     def __init__(self, line):
         self.set_values(line)
-        self.reorder()
+        self._reorder()
 
     def set_values(self, line_values):
         for x1, y1, x2, y2 in line_values:
@@ -16,7 +16,7 @@ class Line:
             self.y2 = y2
 
     # reorder so lowest values are always first
-    def reorder(self):
+    def _reorder(self):
         if self.get_direction() == "hori":
             if self.x1 > self.x2:
                 self.set_values([[self.x2, self.y2, self.x1, self.y1]])
@@ -117,7 +117,7 @@ class Line:
                 return line.x1, line.y1
             return self.x1, self.y1
 
-    # extrapolate line so it reachs border
+    # extrapolate line so it reaches border
     def extrapolate(self, image):
         height, width = image.shape[:2]
         slope = self.get_slope()
@@ -127,31 +127,38 @@ class Line:
         elif slope == 0.0:
             self.set_values([[0, self.y1, width - 1, self.y2]])
         else:
-            m = slope
-            b = self.y1 - m * self.x1
-            x1b = (0 - b) / m
-            x2b = (height - 1 - b) / m
+            x1b = self.get_point(y=0, x=None)
+            x2b = self.get_point(y=height-1, x=None)
             self.set_values([[int(x1b), 0, int(x2b), height - 1]])
 
-    def get_pixel_on_line(self, starting_point, distance):
+    # get point on line based on one
+    # of the axis
+    def get_point(self, x, y):
         slope = self.get_slope()
-        xi, yi = starting_point
-
         if slope is None:
-            return (xi, yi + distance)
+            return (self.x1, y)
+        if slope == 0.0:
+            return (x, self.y1)
 
         m = slope
         b = self.y1 - m * self.x1
+        if x is None:
+            x = (y - b) / m
+        if y is None:
+            y = x * m + b
+
+        return (x, y)
+
+    # gets pixel by moving on the line
+    # from starting point to starting point + distance
+    def get_pixel_on_line(self, starting_point, distance):
+        xi, yi = starting_point
 
         if self.get_direction() == "vert":
-            y = yi + distance
-            x = (y - b) / m
+            x, y = self.get_point(x=None, y=(yi+distance))
             return (int(x), y)
         elif self.get_direction() == "hori":
-            x = xi + distance
-            if slope == 0:
-                return (x, yi)
-            y = x * m + b
+            x, y = self.get_point(x=(xi+distance), y=None)
             return (x, int(y))
 
     def find_intersection(self, line):

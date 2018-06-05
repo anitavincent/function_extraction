@@ -1,6 +1,8 @@
-import cv2
 import numpy as np
 import math
+
+import cv2
+
 from line_operations import *
 from line import Line
 from lineList import LineList

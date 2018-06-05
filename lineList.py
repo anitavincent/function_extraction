@@ -1,9 +1,5 @@
 from line import Line
 
-# possible problem here, you should probably update
-# dictionary everytime you change a line, because its hash
-# is changing, good luck
-
 
 class LineList:
 
@@ -30,13 +26,10 @@ class LineList:
             if line.get_direction() == "none":
                 self.remove_line(line)
 
+    # returns reduced set
+    # for each line, looks for lines that are close
+    # and merge them
     def group_lines(self):
-        # returns reduced set
-        # for each line, looks for lines that are close
-        # and merge them
-
-        # copy of lines list
-
         close_lines = dict(self.lines).values()
         while(True):
             # this means that no close lines groups were found
@@ -50,11 +43,10 @@ class LineList:
                     # break here to recalculate after merging
                     break
 
+    # gets set of lines and a pivot line
+    # looks for lines that are close in space to pivot line
+    # returns set of lines that are close, including the pivot
     def find_close_lines(self, line):
-        # gets set of lines and a pivot line
-        # looks for lines that are close in space to pivot line
-        # returns set of lines that are close, including the pivot
-
         close_lines = []
 
         for line2 in self.lines.values():
@@ -65,10 +57,9 @@ class LineList:
 
         return close_lines
 
+    # receives set of close_lines (lines to be merged)
+    # updates line dictionary with lines now merged
     def merge_close_lines(self, line, close_lines):
-        # receives set of close_lines (lines to be merged)
-        # updates line dictionary with lines now merged
-        # import ipdb; ipdb.set_trace()
         for line2 in close_lines:
             old_hash = line.hashify()
             line.interpolate(line2)

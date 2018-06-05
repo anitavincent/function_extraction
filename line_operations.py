@@ -1,6 +1,8 @@
-import cv2
 import numpy as np
 import math
+
+import cv2
+
 from lineList import LineList
 
 
@@ -10,14 +12,17 @@ def reduce_to_two(lines):
     smallest_diff = math.pi / 2
     for line in lines:
         for line2 in lines:
-            if line.hashify() != line2.hashify():
-                if line.get_direction() != line2.get_direction():
-                    if not visited.get(line.hashify()):
-                        diff = math.fabs(math.pi / 2 - angle(line, line2))
-                        if diff < smallest_diff:
-                            smallest_diff = diff
-                            result1 = line
-                            result2 = line2
+            if visited.get(line.hashify()) or \
+                    line.hashify() == line2.hashify():
+                continue
+
+            if line.get_direction() != line2.get_direction():
+                diff = math.fabs(math.pi / 2 - angle(line, line2))
+                if diff < smallest_diff:
+                    smallest_diff = diff
+                    result1 = line
+                    result2 = line2
+
         visited[line.hashify()] = True
 
     results = LineList()
@@ -50,25 +55,3 @@ def draw_lines(image, lines, thickness=3):
         line.draw(image, color, thickness)
 
     return image
-
-
-def erase_lines(image, lines):
-
-    dicio = classify_lines(lines)
-    acceptable_angle_variation = 10
-
-    if lines is None:
-        return image
-
-    for line in lines:
-        for x1, y1, x2, y2 in line:
-            point = (x1, y1)
-            first_point = find_first_axis_point(image, point, dici[hashify])
-
-    return image
-
-
-def find_first_axis_point(image, starting_point, direction):
-
-    if direction == "verti":
-        get_neighbours_radius(5, up)

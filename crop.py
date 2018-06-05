@@ -1,5 +1,5 @@
 # receives a binary image where 0.0 means YES
-# returns lowest x,y active pixel, also the cropped
+# returns lowest x,y active pixel, also returns the cropped
 # image discarding padding inactive pixels
 
 

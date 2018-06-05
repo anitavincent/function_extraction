@@ -1,9 +1,12 @@
-import cv2
 import numpy as np
 import math
+
+import cv2
+from copy import copy, deepcopy
+
 from line_operations import *
 from line import Line
-from copy import copy, deepcopy
+
 
 BLOCK_SIZE = 15
 VERT_ACCEPTABLE_MIN = 2.4
@@ -198,13 +201,9 @@ def get_valid_points(direction, image, last_point):
             if mask[y][x] != 1:
                 continue
             if (image[y][x] == [0, 0, 255]).all():
-                # import ipdb; ipdb.set_trace()
                 if check_for_direction(direction, last_point, (x, y)):
                     points.append((x, y))
 
-    # if direction=="up" or direction=="down":
-    #     import ipdb; ipdb.set_trace()
-    # cv2.imwrite("./bla2.jpg", image)
     return points
 
 

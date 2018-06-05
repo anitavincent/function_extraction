@@ -1,6 +1,8 @@
-import cv2
 import numpy as np
+
+import cv2
 from skimage.morphology import skeletonize
+
 from crop import *
 
 # parameter for adaptative media threshold
@@ -36,7 +38,7 @@ def block_image_process(image, block_size, thr):
             idx = (row, col)
             block_idx = get_block_index(image.shape, idx, block_size)
             out_image[block_idx] = adaptive_median_threshold(
-                image[block_idx], thr)
+                                   image[block_idx], thr)
 
     return out_image
 
@@ -94,8 +96,4 @@ def extract_skeleton(original_image):
 
     skeleton = convert_to_grayscale(skeleton)
 
-    # cv2.waitKey(0)
-    # height, width = skeleton.shape[:2]
-    # blank_image = np.zeros((height, width, 3), np.uint8)
-    # blank_image[:, :] = (255, 255, 255)
     return skeleton
