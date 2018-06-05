@@ -28,11 +28,11 @@ def run_one_image(img_path):
 
     new_img = clean_axis(clean_image, axis_lines)
 
-    FileManager().save_image(new_img, img_path, "_flood")
+    # FileManager().save_image(new_img, img_path, "_flood")
 
-    # new_img = remove_noise(new_img)
+    new_img = remove_noise(new_img)
 
-    # FileManager().save_image(new_img, img_path, "_curve")
+    FileManager().save_image(new_img, img_path, "_curve")
 
 run_all()
-# run_one_image("group2/grid4.jpg")
+# run_one_image("group1/fun1.png")

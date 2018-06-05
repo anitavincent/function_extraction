@@ -36,9 +36,9 @@ def angle(line, line2):
 
 
 def draw_lines(image, lines, thickness=3):
-    color = [255, 0, 0]
     # get image and a set of points that represents the lines
     # draws lines over image
+    color = [255, 0, 0]
     if len(lines) == 0:
         return image
 
@@ -47,8 +47,6 @@ def draw_lines(image, lines, thickness=3):
             color = [0, 0, 255]
         if line.get_direction() == "hori":
             color = [0, 255, 0]
-        if line.get_direction() == "none":
-            print "ACHOU DIAGO"
         line.draw(image, color, thickness)
 
     return image
@@ -66,8 +64,6 @@ def erase_lines(image, lines):
         for x1, y1, x2, y2 in line:
             point = (x1, y1)
             first_point = find_first_axis_point(image, point, dici[hashify])
-            # image = erase_line(image, point, dicio[hashify],
-            #                     acceptable_angle_variation)
 
     return image
 

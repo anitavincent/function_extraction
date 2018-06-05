@@ -5,9 +5,10 @@ from line_operations import *
 from line import Line
 from copy import copy, deepcopy
 
-BLOCK_SIZE = 10
+BLOCK_SIZE = 15
 VERT_ACCEPTABLE_MIN = 2.4
 HORI_ACCEPTABLE_MAX = 0.40
+POINT_DISTANCE = 8
 
 
 def erase_lines(image, lines):
@@ -15,7 +16,6 @@ def erase_lines(image, lines):
     if lines is None:
         return image
 
-    # import ipdb; ipdb.set_trace()
     for line in lines:
         image = erase_line(image, line)
 
@@ -28,24 +28,33 @@ def erase_line(image, line):
 
     if line.get_direction() == "vert":
         erase("up", image, starting_point)
-        starting_point = (line.x1, line.y1+BLOCK_SIZE/2)
+
+        starting_point = line.get_pixel_on_line(starting_point, POINT_DISTANCE)
+        starting_point = get_white_pixel_around(image, starting_point)
+
         erase("down", image, starting_point)
     else:
         erase("left", image, starting_point)
-        starting_point = (line.x1+BLOCK_SIZE/2, line.y1)
+        starting_point = line.get_pixel_on_line(starting_point, POINT_DISTANCE)
+        starting_point = get_white_pixel_around(image, starting_point)
         erase("right", image, starting_point)
 
     starting_point = (line.x2, line.y2)
     if (image[starting_point[1]][starting_point[0]] != [0, 0, 0]).all():
 
         if line.get_direction() == "vert":
-            point = move("up", image, starting_point)
-            starting_point = (line.x2, line.y2+BLOCK_SIZE/2)
-            erase("down", image, point)
+            erase("up", image, starting_point)
+
+            starting_point = line.get_pixel_on_line(starting_point,
+                                                    POINT_DISTANCE)
+            starting_point = get_white_pixel_around(image, starting_point)
+            erase("down", image, starting_point)
         else:
-            point = move("left", image, starting_point)
-            starting_point = (line.x2+BLOCK_SIZE/2, line.y2)
-            erase("right", image, point)
+            erase("left", image, starting_point)
+            starting_point = line.get_pixel_on_line(starting_point,
+                                                    POINT_DISTANCE)
+            starting_point = get_white_pixel_around(image, starting_point)
+            erase("right", image, starting_point)
 
     return image
 
@@ -62,6 +71,33 @@ def build_mask(image, starting_point, block_s, offset=1):
     cv2.rectangle(mask, mask_start, mask_end, 1)
 
     return mask
+
+
+def get_white_pixel_around(image, point):
+    offset = 3
+    h, w = image.shape[:2]
+
+    init_x, init_y = point
+    if init_x >= w or init_x < 0:
+        return None
+    if init_y >= h or init_y < 0:
+        return None
+    if (image[init_y][init_x] == [255, 255, 255]).all():
+        return point
+
+    for x in range(init_x-offset, init_x+offset):
+        if x >= w or x < 0:
+            continue
+        if (image[init_y][x] == [255, 255, 255]).all():
+            return (x, init_y)
+
+    for y in range(init_y-offset, init_y+offset):
+        if y >= h or y < 0:
+            continue
+        if (image[y][init_x] == [255, 255, 255]).all():
+            return (init_x, y)
+
+    return None
 
 
 def flood_fill(image, starting_point):
@@ -86,6 +122,9 @@ def move(direction, image, starting_point):
 
 
 def erase(direction, image, starting_point):
+    if starting_point is None:
+        return
+
     point = starting_point
     original = deepcopy(image)
     while True:
