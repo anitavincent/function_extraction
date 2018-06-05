@@ -1,6 +1,7 @@
 from extract_skeleton import extract_skeleton
 from find_lines import *
 from clean_axis import *
+from remove_noise import *
 from FileManager import FileManager
 import cv2
 
@@ -27,7 +28,11 @@ def run_one_image(img_path):
 
     new_img = clean_axis(clean_image, axis_lines)
 
-    FileManager().save_image(new_img, img_path, "_flood")
+    # FileManager().save_image(new_img, img_path, "_flood")
+
+    new_img = remove_noise(new_img)
+
+    FileManager().save_image(new_img, img_path, "_curve")
 
 run_all()
 # run_one_image("group2/grid4.jpg")
