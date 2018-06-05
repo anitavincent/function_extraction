@@ -133,6 +133,27 @@ class Line:
             x2b = (height - 1 - b) / m
             self.set_values([[int(x1b), 0, int(x2b), height - 1]])
 
+    def get_pixel_on_line(self, starting_point, distance):
+        slope = self.get_slope()
+        xi, yi = starting_point
+
+        if slope is None:
+            return (xi, yi + distance)
+
+        m = slope
+        b = self.y1 - m * self.x1
+
+        if self.get_direction() == "vert":
+            y = yi + distance
+            x = (y - b) / m
+            return (int(x), y)
+        elif self.get_direction() == "hori":
+            x = xi + distance
+            if slope == 0:
+                return (x, yi)
+            y = x * m + b
+            return (x, int(y))
+
     def find_intersection(self, line):
         x1, y1, x2, y2 = [self.x1, self.y1, self.x2, self.y2]
         x3, y3, x4, y4 = [line.x1, line.y1, line.x2, line.y2]
