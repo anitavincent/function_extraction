@@ -25,12 +25,8 @@ def find_lines(image):
 
     line_list.remove_diagonal_lines()
     line_list.group_lines()
-    line_list.extrapolate_lines(original)
+    # line_list.extrapolate_lines(original)
     new_list = reduce_to_two(line_list.lines.values())
-    original = draw_lines(original, new_list.lines.values())
-    # original = erase_lines(original, lines)
+    image_with_lines = draw_lines(original, new_list.lines.values())
 
-    return line_list, original
-
-    # cv2.imshow("", dilation)
-    # cv2.waitKey(0)
+    return new_list, image_with_lines
