@@ -31,4 +31,9 @@ def find_lines(image):
     new_list = reduce_to_two(line_list.lines.values())
     image_with_lines = draw_lines(original, new_list.lines.values())
 
-    return new_list, image_with_lines
+    line1 = new_list.lines.values()[0]
+    line2 = new_list.lines.values()[1]
+    px, py = line1.find_intersection(line2)
+    image_with_lines[py][px] = [255, 0, 0]
+
+    return new_list, (px, py), image_with_lines
