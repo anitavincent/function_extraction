@@ -4,14 +4,15 @@ from extract_skeleton import extract_skeleton
 from find_lines import *
 from clean_axis import *
 from remove_noise import *
+from FileManager import FileManager
 
 
-def extract_features(image):
+def extract_features(image, img_path):
 
     image = extract_skeleton(image)
     clean_image = image.copy()
 
-    # FileManager().save_image(image, img_path, "_skeleton")
+    FileManager().save_image(image, img_path, "_skeleton")
 
     axis_lines, inter_point, image_lines = find_lines(image)
 

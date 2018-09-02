@@ -3,8 +3,9 @@ import cv2
 
 class FileManager:
 
-    results_folder = "./pictures/results/"
-    originals_folder = "./pictures/originals/"
+    results_folder = "../pictures/results/"
+    originals_folder = "../pictures/originals/"
+    output_folder = "../text_results/"
 
     all_imgs = ["group1/graph_simple.jpeg",
                 "group1/graph_drawing.jpeg",
@@ -47,6 +48,16 @@ class FileManager:
         group, name, ext = self._separate_name(original_path)
         base = "{}{}{}".format(self.results_folder, group, name)
         cv2.imwrite("{}{}{}".format(base, aditional_name, ext), image)
+
+    def save_txt(self, original_path, image, origin):
+        group, name, ext = self._separate_name(original_path)
+        base = "{}{}{}".format(self.output_folder, group, name)
+
+        with open("{}.txt".format(base), 'a') as the_file:
+            for row in range(0, image.shape[0]):
+                for col in range(0, image.shape[1]):
+                    if (image[row][col] == [255, 255, 255]).all():
+                        the_file.write("{} {}\n".format(row, col))
 
     def get_image(self, path):
         print "{}{}".format(self.originals_folder, path)

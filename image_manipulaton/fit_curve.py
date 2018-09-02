@@ -78,7 +78,7 @@ def save_txt(image, origin):
 
 def fit_curve(image, origin_point):
     points_x, points_y = get_points(image, origin_point)
-    save_txt(image, origin_point)
+    # save_txt(image, origin_point)
 
     A, b = get_eq_polinomial(2, points_x, points_y)
 
