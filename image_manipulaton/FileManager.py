@@ -24,10 +24,10 @@ class FileManager:
                 "group2/grid3.png",
                 "group2/grid4.jpg",
                 "group3/grid1.png",
-                "group3/grid2.png",
-                "group3/grid3.png",
-                "group3/grid4.png",
-                "group3/grid5.png"
+                # "group3/grid2.png",
+                # "group3/grid3.png",
+                # "group3/grid4.png",
+                # "group3/grid5.png"
                 ]
 
     def __init__(self):
