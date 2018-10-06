@@ -34,6 +34,8 @@ def draw_points(image, origin, points_x, points_y):
     # blank_image = np.zeros((image.shape[0], image.shape[1], 3), np.uint8)
 
     for index in range(0, len(points_x)):
+        if math.isinf(points_y[index]):
+            continue
         i = int(oy - points_y[index])
         if i > image.shape[0] or i < 0:
             continue
