@@ -26,6 +26,8 @@ class FileManager:
                 "group1/log3.png",
                 "group1/log4.png",
                 "group1/normal.png",
+                "group1/fracti_first_degree.png",
+                "group1/fracti_sec_degree.png",
                 "group2/dotted1.jpeg",
                 "group2/dotted2.jpeg",
                 "group2/grid1.png",

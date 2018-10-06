@@ -8,6 +8,7 @@ from fit_exponential import fit_exponential
 from fit_sin import fit_sin
 from fit_log import fit_log
 from fit_gauss import fit_gauss
+from fit_fraction import fit_fraction
 
 
 def run_all():
@@ -27,9 +28,9 @@ def run_one_image(img_path):
         print "Axis not found - skipping this image"
         return
 
-    image = fit_gauss(curve, origin_point)
+    image = fit_fraction(curve, origin_point)
 
-    FileManager().save_image(image, img_path, "_gauss")
+    FileManager().save_image(image, img_path, "_frac")
     # FileManager().save_txt(img_path, curve, origin_point)
 
 
