@@ -5,9 +5,16 @@ import cv2
 
 from lineList import LineList
 
+class AxisNotFound(Exception):
+    """Raise when less than two lines are found on image"""
 
 def reduce_to_two(lines):
     # returns only the 2 lines most perpendicular
+
+    if (len(lines)<2):
+        print "Couldn't detect two axis sorry :("
+        raise AxisNotFound()
+
     visited = {}
     smallest_diff = math.pi / 2
     for line in lines:

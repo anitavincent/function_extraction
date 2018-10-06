@@ -165,6 +165,9 @@ class Line:
         x1, y1, x2, y2 = [self.x1, self.y1, self.x2, self.y2]
         x3, y3, x4, y4 = [line.x1, line.y1, line.x2, line.y2]
 
+        x1, y1, x2, y2 = [long(x1), long(y1), long(x2), long(y2)]
+        x3, y3, x4, y4 = [long(x3), long(y3), long(x4), long(y4) ]
+
         # determinant
         px = ((x1 * y2 - y1 * x2) * (x3 - x4) -
               (x1 - x2) * (x3 * y4 - y3 * x4)) /  \

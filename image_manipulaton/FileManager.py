@@ -17,6 +17,14 @@ class FileManager:
                 "group1/fun4.jpg",
                 "group1/fun5.png",
                 "group1/fun6.jpg",
+                "group1/Sinx.jpg",
+                "group1/sin1.png",
+                "group1/sin2.png",
+                "group1/sin3.png",
+                "group1/log1.png",
+                "group1/log2.png",
+                "group1/log3.png",
+                "group1/log4.png",
                 "group2/dotted1.jpeg",
                 "group2/dotted2.jpeg",
                 "group2/grid1.png",
@@ -24,10 +32,10 @@ class FileManager:
                 "group2/grid3.png",
                 "group2/grid4.jpg",
                 "group3/grid1.png",
-                "group3/grid2.png",
-                "group3/grid3.png",
-                "group3/grid4.png",
-                "group3/grid5.png"
+                # "group3/grid2.png",
+                # "group3/grid3.png",
+                # "group3/grid4.png",
+                # "group3/grid5.png"
                 ]
 
     def __init__(self):

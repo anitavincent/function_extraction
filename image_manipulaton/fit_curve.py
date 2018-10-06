@@ -13,8 +13,8 @@ def get_points(image, origin):
     points_x = []
     points_y = []
 
-    for row in range(0, image.shape[0]):
-        for col in range(0, image.shape[1]):
+    for col in range(0, image.shape[1]):
+        for row in range(0, image.shape[0]):
             if (image[row][col] == [255, 255, 255]).all():
                 # print ("{},{}".format(col-ox, oy-row))
                 points_x.append(col-ox)
@@ -23,28 +23,10 @@ def get_points(image, origin):
     return np.array(points_x), np.array(points_y)
 
 
-def calculate_polinomial(a_vec, x):
-    result = 0
-    for i in range(0, len(a_vec)):
-        a = a_vec[i]
-        result = result + a * x**i
+def calculate_polinomial(sol, x):
+    p = np.poly1d(sol)
 
-    return result
-
-
-def get_eq_polinomial(degree, x_points, y_points):
-
-    mat_trans = []
-    for i in range(0, degree+1):
-        mat_trans.append(np.power(x_points, i))
-
-    mat_trans = np.array(mat_trans)
-    mat = mat_trans.transpose()
-
-    A = np.dot(mat_trans, mat)
-    b = np.dot(mat_trans, y_points)
-
-    return A, b
+    return p(x)
 
 
 def print_results(solution, points_x, image, origin):
@@ -61,35 +43,20 @@ def print_results(solution, points_x, image, origin):
     return image
 
 
-def save_txt(image, origin):
-    ox = origin[0]
-    oy = origin[1]
-
-    points_x = []
-    points_y = []
-
-    with open('somefile.txt', 'a') as the_file:
-        the_file.write("{} {}\n".format(oy, ox))
-        for row in range(0, image.shape[0]):
-            for col in range(0, image.shape[1]):
-                if (image[row][col] == [255, 255, 255]).all():
-                    the_file.write("{} {}\n".format(row, col))
-
-
 def fit_curve(image, origin_point):
     points_x, points_y = get_points(image, origin_point)
-    # save_txt(image, origin_point)
+    x = points_x
+    y = points_y
+    plt.plot(x, y)
 
-    A, b = get_eq_polinomial(2, points_x, points_y)
-
-    sol = np.linalg.solve(A, b)
-    print sol
+    sol = np.polyfit(x, y, 3)
     image = print_results(sol, points_x, image, origin_point)
 
-    # points_x.sort()
-    # x = points_x
-    # y = calculate_polinomial(sol, x)
-    # plt.plot(x, y)
-    # plt.show()
+    points_x.sort()
+    x = points_x
+    y = calculate_polinomial(sol, x)
+    plt.plot(x, y, color='blue')
+    plt.axis('equal')
+    plt.show()
 
     return image
