@@ -15,6 +15,10 @@ def reduce_to_two(lines):
         print "Couldn't detect two axis sorry :("
         raise AxisNotFound()
 
+    if (len(lines)==2 and lines[1].get_direction() == lines[0].get_direction()):
+        print "Couldn't detect two perpendicular axis sorry :("
+        raise AxisNotFound()
+
     visited = {}
     smallest_diff = math.pi / 2
     for line in lines:
