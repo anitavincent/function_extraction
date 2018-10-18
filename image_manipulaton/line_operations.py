@@ -13,10 +13,12 @@ def reduce_to_two(lines):
 
     if (len(lines)<2):
         print "Couldn't detect two axis sorry :("
+        print ""
         raise AxisNotFound()
 
     if (len(lines)==2 and lines[1].get_direction() == lines[0].get_direction()):
         print "Couldn't detect two perpendicular axis sorry :("
+        print ""
         raise AxisNotFound()
 
     visited = {}

@@ -1,14 +1,8 @@
 import cv2
 
+from find_best_fit import find_best_fit
 from FileManager import FileManager
 from extract_features import *
-
-from fit_curve import fit_curve
-from fit_exponential import fit_exponential
-from fit_sin import fit_sin
-from fit_log import fit_log
-from fit_gauss import fit_gauss
-from fit_fraction import fit_fraction
 
 
 def run_all():
@@ -26,13 +20,14 @@ def run_one_image(img_path):
         curve, lines, origin_point = extract_features(image, img_path)
     except AxisNotFound:
         print "Axis not found - skipping this image"
+        print ""
         return
 
-    image = fit_fraction(curve, origin_point)
+    image, found_min = find_best_fit(curve, origin_point)
 
-    FileManager().save_image(image, img_path, "_frac")
+    FileManager().save_image(image, img_path, "_bestfit")
     # FileManager().save_txt(img_path, curve, origin_point)
 
 
 run_all()
-# run_one_image("group1/log4.png")
+# run_one_image("group1/fun2.png")

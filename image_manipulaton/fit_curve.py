@@ -1,26 +1,5 @@
-import cv2
 import numpy as np
 import math
-
-import scipy.sparse.linalg as spla
-import matplotlib.pyplot as plt
-
-
-def get_points(image, origin):
-    ox = origin[0]
-    oy = origin[1]
-
-    points_x = []
-    points_y = []
-
-    for col in range(0, image.shape[1]):
-        for row in range(0, image.shape[0]):
-            if (image[row][col] == [255, 255, 255]).all():
-                # print ("{},{}".format(col-ox, oy-row))
-                points_x.append(col-ox)
-                points_y.append(oy-row)
-
-    return np.array(points_x), np.array(points_y)
 
 
 def calculate_polinomial(sol, x):
@@ -29,34 +8,36 @@ def calculate_polinomial(sol, x):
     return p(x)
 
 
-def print_results(solution, points_x, image, origin):
+def fit_poli(x_points, y_points, degree):
 
-    image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
-    for j in points_x:
-        i = calculate_polinomial(solution, j)
-        j = int(math.floor(j)) + origin[0]
-        i = (int(math.floor(i)) - origin[1]) * -1
-        if (abs(i) > image.shape[0]):
-            continue
-        image[i][j] = [0, 255, 0]
+    sol, residual, _, _, _ = np.polyfit(x_points, y_points, degree, full=True)
+    y_result = calculate_polinomial(sol, x_points)
+    y_guess = y_result
 
-    return image
+    error = residual[0]
+
+    return sol, y_guess, y_result, error
 
 
-def fit_curve(image, origin_point):
-    points_x, points_y = get_points(image, origin_point)
-    x = points_x
-    y = points_y
-    plt.plot(x, y)
+def fit_all_poli(x_points, y_points, top_degree=8):
 
-    sol = np.polyfit(x, y, 3)
-    image = print_results(sol, points_x, image, origin_point)
+    acceptable_error = 5 * len(x_points)
+    dictio = {}
 
-    points_x.sort()
-    x = points_x
-    y = calculate_polinomial(sol, x)
-    plt.plot(x, y, color='blue')
-    plt.axis('equal')
-    plt.show()
+    for i in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
+        sol, y_guess, y_result, error = fit_poli(x_points, y_points, i)
+        dictio[i] = error
 
-    return image
+        if error <= acceptable_error:
+            return sol, y_guess, y_result, error, i
+        elif (i == top_degree):
+            break
+
+    insignificant_diff = 2 * len(x_points)
+    big = 8
+    for i in range(0, 8):
+        if np.abs(dictio[8] - dictio[i]) <= insignificant_diff:
+            sol, y_guess, y_result, error = fit_poli(x_points, y_points, i)
+            return sol, y_guess, y_result, error, i
+
+    return sol, y_guess, y_result, error, i
